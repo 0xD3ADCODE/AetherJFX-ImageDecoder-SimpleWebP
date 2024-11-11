@@ -56,6 +56,13 @@ SimpleWEBPLoader.register();
 
 After that all WebP images will be decoded using newly installed decoder directly into JavaFX's `Image`
 
+## Development
+
+To properly build `jar` by yourself, clone repository and create `gradle.properties` file with:
+```text
+AETHER_JFX_SDK_PATH = <path to unpacked AetherJFX SDK folder>
+```
+
 ## Credits
 [Google](https://developers.google.com) for [WebP](https://developers.google.com/speed/webp) decoder  
 [burningtnt](https://github.com/burningtnt/) for [SimpleWEBP](https://github.com/burningtnt/SimpleWEBP) WebP decoder/encoder implementation for Java

@@ -8,56 +8,15 @@ version = 'v1.0'
 
 repositories {
     mavenCentral()
-    def github = ivy {
-        url 'https://github.com/'
-        patternLayout {
-            artifact '/[organisation]/[module]/releases/download/[revision]/[artifact].[ext]'
-        }
-        metadataSources { artifact() }
-    }
-    exclusiveContent {
-        forRepositories(github)
-        filter { includeGroup("0xD3ADCODE") }
-    }
 }
 
-def aetherJFXVersion = "v23.1"
-def aetherJFXFullName = "AetherJFX-SDK-${aetherJFXVersion}-${osdetector.classifier}"
-def aetherJFXSDKDir = "sdk/${aetherJFXFullName}"
-
 javafx {
+    sdk = AETHER_JFX_SDK_PATH
     modules = ['javafx.base', 'javafx.graphics']
     configuration = "compileOnly"
-
-    java.util.Optional.ofNullable(file("${projectDir}/${aetherJFXSDKDir}"))
-            .map { it.list() }
-            .filter { it.size() > 0 }
-            .ifPresent { sdk = "/${aetherJFXSDKDir}" }
 }
 
 dependencies {
-    // AetherJFX
-    implementation("0xD3ADCODE:AetherJFX:${aetherJFXVersion}") {
-        artifact {
-            name = aetherJFXFullName
-            type = 'zip'
-        }
-    }
-}
-
-tasks.register('unzipAetherJFX') {
-    copy {
-        def zipPath = project.configurations.runtimeClasspath.find { it.name.startsWith(aetherJFXFullName) }
-        def outputDir = file("${projectDir}/${aetherJFXSDKDir}")
-        outputDir.mkdirs()
-
-        if (outputDir.list().size() == 0) {
-            println("WARNING! AetherJFX SDK requires one more gradle sync to setup correctly!")
-            def zipFile = file(zipPath)
-            from zipTree(zipFile)
-            into outputDir
-        }
-    }
 }
 
 compileJava.options.encoding = 'UTF-8'
